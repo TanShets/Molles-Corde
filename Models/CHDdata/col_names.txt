@@ -1,0 +1,1 @@
+sbp,tobacco,ldl,adiposity,typea,obesity,alcohol,age
