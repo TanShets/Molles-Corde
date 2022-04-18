@@ -1,0 +1,66 @@
+{% extends "diagnosis/diagnosis_main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
+    <h1>Enter Arrhythmia Information</h1><br>
+    <form method = "POST">
+        {% csrf_token %}
+        <fieldset class = "form-group">
+            <input name = "qrs_duration" type = "number" step = "any">
+            <input name = "p-r_interval" type = "number" step = "any">
+            <input name = "q-t_interval" type = "number" step = "any">
+            <input name = "t_interval" type = "number" step = "any">
+            <input name = "p_interval" type = "number" step = "any">
+            <input name = "qrs" type = "number" step = "any">
+            <input name = "T" type = "number" step = "any">
+            <input name = "P" type = "number" step = "any">
+            <input name = "QRST" type = "number" step = "any">
+            <input name = "J" type = "number" step = "any">
+            <input name = "Q wave" type = "number" step = "any">
+            <input name = "R wave" type = "number" step = "any">
+            <input name = "S wave" type = "number" step = "any">
+            <input name = "R' wave" type = "number" step = "any">
+            <input name = "S' wave" type = "number" step = "any">
+            <input name = "no_of_deflections" type = "number">
+            <select name = "Ragged R wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "Diphasic Derivation of R wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "Ragged P wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "Diphasic Derivation of P wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "Ragged T wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "Diphasic Derivation of T wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <input name = "JJ wave Amp" type = "number" step = "any">
+            <input name = "Q wave Amp" type = "number" step = "any">
+            <input name = "R wave Amp" type = "number" step = "any">
+            <input name = "S wave Amp" type = "number" step = "any">
+            <input name = "R' wave Amp" type = "number" step = "any">
+            <input name = "S' wave Amp" type = "number" step = "any">
+            <input name = "P wave Amp" type = "number" step = "any">
+            <input name = "T wave Amp" type = "number" step = "any">
+            <input name = "QRSA" type = "number" step = "any">
+            <input name = "QRSTA" type = "number" step = "any">
+        </fieldset>
+        <div class = "form-group">
+            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
+            <a class = "btn btn-primary" id = "Login" href = "{% url 'diagnosis-home' %}">Create Account</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

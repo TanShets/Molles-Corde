@@ -1,0 +1,41 @@
+{% extends "diagnosis/diagnosis_main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
+    <h1>Enter General Information</h1><br>
+    <form method = "POST">
+        {% csrf_token %}
+        <fieldset class = "form-group">
+            <input name = "age" type = "number">
+            <input name = "weight" type = "number" step = "any">
+            <input name = "height" type = "number" step = "any">
+            <select name = "sex">
+                <option value = '1'>Male</option>
+                <option value = '0'>Female</option>
+            </select>
+            <select name = "smoke">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "alcohol">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <select name = "physical_activity">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+            <input name = "heart_rate" type = "number" step = "any">
+            <select name = "cholesterol">
+                <option value = "1">Normal</option>
+                <option value = "2">Above Normal</option>
+                <option value = "3">Well above normal</option>
+            </select>
+        </fieldset>
+        <div class = "form-group">
+            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
+            <a class = "btn btn-primary" id = "Login" href = "{% url 'diagnosis-home' %}">Create Account</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

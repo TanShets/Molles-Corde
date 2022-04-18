@@ -3,7 +3,10 @@ import pandas as pd
 from tensorflow.keras.models import load_model
 import sys
 sys.path.append('../molles_corde')
-from settings import BASE_DIR
+from pathlib import Path
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_model(name):
     addr = BASE_DIR.__str__().replace("\\", '/')
@@ -12,7 +15,7 @@ def get_model(name):
         'cvd': addr + '/Models/CVD.h5',
         'hypertension': addr + '/Models/model1_hypertension.h5',
         'arrhythmia': addr + '/Models/Arrhythmia2.h5',
-        'general': addr + '/Models/gen_model_2/model2.h5'
+        'general': addr + '/Models/model3.h5'
     }
     
     if linker.get(name, None) is None:
@@ -43,15 +46,18 @@ def normalize_input(X, name):
         X_max = np.load(addr + '/Models/Arrhythmia/max.npy')
         X[line] = (X[line] - X_min) / (X_max - X_min)
     elif name == 'general':
-        X_min = np.load(addr + '/Models/Arrhythmia/min.npy')
-        X_max = np.load(addr + '/Models/Arrhythmia/max.npy')
+        X_min = np.load(addr + '/Models/gen_model_2/gen_min.npy')[:8]
+        X_max = np.load(addr + '/Models/gen_model_2/gen_max.npy')[:8]
         X = (X - X_min) / (X_max - X_min)
+    
     return np.array(X)
 
 def get_model_result(X, name):
     X_in = normalize_input(X, name)
     model = get_model(name)
+    # print(model.summary())
     if model is None:
         return None
-    
-    return model.predict(X)
+    # print(model.predict(aaa))
+    # print(model.predict(X_in))
+    return model.predict(X_in)
