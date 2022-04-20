@@ -3,12 +3,19 @@
 {% block content %}
 <div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
     <h1>Enter CVD Information</h1><br>
-    <form method = "POST">
+    <form method = "POST" style = "width: 50%;">
         {% csrf_token %}
         <fieldset class = "form-group">
-            <input name = "ap_hi" type = "number" step = "any">
-            <input name = "ap_lo" type = "number" step = "any">
-            <select name = "gluc">
+            <label for = "ap_hi">Systolic Blood Pressure:</label>
+            <input class = "form-control" name = "ap_hi" type = "number" id = "ap_hi" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "ap_lo">Diastolic Blood Pressure:</label>
+            <input class = "form-control" name = "ap_lo" type = "number" id = "ap_lo" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "gluc">Glucose Level:</label>
+            <select name = "gluc" id = "gluc" class = "form-control">
                 <option value = "1">Normal</option>
                 <option value = "2">Above Normal</option>
                 <option value = "3">Well above normal</option>

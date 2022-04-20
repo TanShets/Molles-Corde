@@ -3,30 +3,55 @@
 {% block content %}
 <div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
     <h1>Enter General Information</h1><br>
-    <form method = "POST">
+    <form method = "POST" style="width: 50%;">
         {% csrf_token %}
         <fieldset class = "form-group">
-            <input name = "age" type = "number">
-            <input name = "weight" type = "number" step = "any">
-            <input name = "height" type = "number" step = "any">
-            <select name = "sex">
+            <label for = "age">Age (years):</label>
+            <input class = "form-control" name = "age" id = "age" type = "number">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "weight">Weight(kg):</label>
+            <input class = "form-control" name = "weight" id = "weight" type = "number" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "height">Height(m):</label>
+            <input class = "form-control" name = "height" id = "height" type = "number" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "sex">Sex:</label>
+            <select class = "form-control" name = "sex" id = "sex">
                 <option value = '1'>Male</option>
                 <option value = '0'>Female</option>
             </select>
-            <select name = "smoke">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "smoke">Smoking Habit?</label>
+            <select class = "form-control" name = "smoke" id = "smoke">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
             </select>
-            <select name = "alcohol">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "alcohol">Alcohol consumption?</label>
+            <select class = "form-control" name = "alcohol" id = "alcohol">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
             </select>
-            <select name = "physical_activity">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "physical_activity">Physically activity?</label>
+            <select class = "form-control" name = "physical_activity" id = "physical_activity">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
             </select>
-            <input name = "heart_rate" type = "number" step = "any">
-            <select name = "cholesterol">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "heart_rate">Heart Rate:</label>
+            <input class = "form-control" name = "heart_rate" type = "number" step = "any" id = "heart_rate">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "cholesterol">Cholesterol Level:</label>
+            <select class = "form-control" name = "cholesterol" id = "cholesterol">
                 <option value = "1">Normal</option>
                 <option value = "2">Above Normal</option>
                 <option value = "3">Well above normal</option>

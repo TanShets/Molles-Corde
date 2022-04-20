@@ -3,60 +3,156 @@
 {% block content %}
 <div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
     <h1>Enter Arrhythmia Information</h1><br>
-    <form method = "POST">
+    <form method = "POST" style = "width: 50%;">
         {% csrf_token %}
         <fieldset class = "form-group">
-            <input name = "qrs_duration" type = "number" step = "any">
-            <input name = "p-r_interval" type = "number" step = "any">
-            <input name = "q-t_interval" type = "number" step = "any">
-            <input name = "t_interval" type = "number" step = "any">
-            <input name = "p_interval" type = "number" step = "any">
-            <input name = "qrs" type = "number" step = "any">
-            <input name = "T" type = "number" step = "any">
-            <input name = "P" type = "number" step = "any">
-            <input name = "QRST" type = "number" step = "any">
-            <input name = "J" type = "number" step = "any">
-            <input name = "Q wave" type = "number" step = "any">
-            <input name = "R wave" type = "number" step = "any">
-            <input name = "S wave" type = "number" step = "any">
-            <input name = "R' wave" type = "number" step = "any">
-            <input name = "S' wave" type = "number" step = "any">
-            <input name = "no_of_deflections" type = "number">
-            <select name = "Ragged R wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <select name = "Diphasic Derivation of R wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <select name = "Ragged P wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <select name = "Diphasic Derivation of P wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <select name = "Ragged T wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <select name = "Diphasic Derivation of T wave">
-                <option value = "1">Yes</option>
-                <option value = "0">No</option>
-            </select>
-            <input name = "JJ wave Amp" type = "number" step = "any">
-            <input name = "Q wave Amp" type = "number" step = "any">
-            <input name = "R wave Amp" type = "number" step = "any">
-            <input name = "S wave Amp" type = "number" step = "any">
-            <input name = "R' wave Amp" type = "number" step = "any">
-            <input name = "S' wave Amp" type = "number" step = "any">
-            <input name = "P wave Amp" type = "number" step = "any">
-            <input name = "T wave Amp" type = "number" step = "any">
-            <input name = "QRSA" type = "number" step = "any">
-            <input name = "QRSTA" type = "number" step = "any">
+            <label for = "qrs_duration">Current Altitude above sea level:</label>
+            <input class = "form-control" name = "qrs_duration" type = "number" step = "any" id = "qrs_duration">
         </fieldset>
+        <fieldset class = "form-group">
+            <label for = "p-r_interval">P-R interval:</label>
+            <input class = "form-control" name = "p-r_interval" type = "number" step = "any" id = "p-r_interval">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "q-t_interval">Q-T interval: </label>
+            <input class = "form-control" name = "q-t_interval" type = "number" id = "q-t_interval" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "t_interval">T interval: </label>
+            <input class = "form-control" name = "t_interval" type = "number" id = "t_interval" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "p_interval">P interval: </label>
+            <input class = "form-control" name = "p_interval" type = "number" id = "p_interval" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "qrs">QRS:</label>
+            <input class = "form-control" name = "qrs" type = "number" id = "qrs" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "T">T:</label>
+            <input class = "form-control" name = "T" type = "number" id = "T" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "P">P:</label>
+            <input class = "form-control" name = "P" type = "number" id = "P" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "QRST">QRST:</label>
+            <input class = "form-control" name = "QRST" type = "number" id = "QRST" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "J">J:</label>
+            <input class = "form-control" name = "J" type = "number" id = "J" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Q wave">Q wave:</label>
+            <input class = "form-control" name = "Q wave" type = "number" id = "Q wave" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "R wave">R wave:</label>
+            <input class = "form-control" name = "R wave" type = "number" id = "R wave" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "S wave">S wave:</label>
+            <input class = "form-control" name = "S wave" type = "number" id = "S wave" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "R' wave">R' wave:</label>
+            <input class = "form-control" name = "R' wave" type = "number" id = "R' wave" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "S' wave">S' wave:</label>
+            <input class = "form-control" name = "S' wave" type = "number" id = "S' wave" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "no_of_deflections">No. of Deflections:</label>
+            <input class = "form-control" name = "no_of_deflections" type = "number" id = "no_of_deflections">
+        </fieldset>
+
+        <fieldset class = "form-group">
+            <label for = "Ragged R wave">Ragged R wave?</label>
+            <select class = "form-control" name = "Ragged R wave" id = "Ragged R wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Diphasic Derivation of R wave">Diphasic Derivation of R wave?</label>
+            <select class = "form-control" name = "Diphasic Derivation of R wave" id = "Diphasic Derivation of R wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Ragged P wave">Ragged P wave?</label>
+            <select class = "form-control" name = "Ragged P wave" id = "Ragged P wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Diphasic Derivation of P wave">Diphasic Derivation of P wave?</label>
+            <select class = "form-control" name = "Diphasic Derivation of P wave" id = "Diphasic Derivation of P wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Ragged T wave">Ragged T wave?</label>
+            <select class = "form-control" name = "Ragged T wave" id = "Ragged T wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Diphasic Derivation of T wave">Diphasic Derivation of T wave?</label>
+            <select class = "form-control" name = "Diphasic Derivation of T wave" id = "Diphasic Derivation of T wave">
+                <option value = "1">Yes</option>
+                <option value = "0">No</option>
+            </select>
+        </fieldset>
+
+        <fieldset class = "form-group">
+            <label for = "JJ wave Amp">JJ wave Amp:</label>
+            <input class = "form-control" name = "JJ wave Amp" type = "number" id = "JJ wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "Q wave Amp">Q wave Amp:</label>
+            <input class = "form-control" name = "Q wave Amp" type = "number" id = "Q wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "R wave Amp">R wave Amp:</label>
+            <input class = "form-control" name = "R wave Amp" type = "number" id = "R wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "S wave Amp">S wave Amp:</label>
+            <input class = "form-control" name = "S wave Amp" type = "number" id = "S wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "R' wave Amp">R' wave Amp:</label>
+            <input class = "form-control" name = "R' wave Amp" type = "number" id = "R' wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "S' wave Amp">S' wave Amp:</label>
+            <input class = "form-control" name = "S' wave Amp" type = "number" id = "S' wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "P wave Amp">P wave Amp:</label>
+            <input class = "form-control" name = "P wave Amp" type = "number" id = "P wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "T wave Amp">T wave Amp:</label>
+            <input class = "form-control" name = "T wave Amp" type = "number" id = "T wave Amp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "QRSA">QRS Amplitude:</label>
+            <input class = "form-control" name = "QRSA" type = "number" id = "QRSA" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "QRSTA">QRST Amplitude:</label>
+            <input class = "form-control" name = "QRSTA" type = "number" id = "QRSTA" step = "any">
+        </fieldset>        
         <div class = "form-group">
             <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
             <a class = "btn btn-primary" id = "Login" href = "{% url 'diagnosis-home' %}">Create Account</a>

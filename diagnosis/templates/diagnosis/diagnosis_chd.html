@@ -3,19 +3,38 @@
 {% block content %}
 <div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
     <h1>Enter CHD Information</h1><br>
-    <form method = "POST">
+    <form method = "POST" style="width: 50%;">
         {% csrf_token %}
         <fieldset class = "form-group">
-            <input name = "sbp" type = "number" step = "any">
-            <input name = "tobacco" type = "number" step = "any">
-            <input name = "ldl" type = "number" step = "any">
-            <input name = "adiposity" type = "number" step = "any">
-            <select name = "famhist">
+            <label for = "sbp">Systolic Blood Pressure:</label>
+            <input class = "form-control" name = "sbp" type = "number" id = "sbp" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "tobacco">Yearly Tobacco Consumption(kg):</label>
+            <input class = "form-control" name = "tobacco" type = "number" id = "tobacco" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "ldl">Low Density Lipoprotein:</label>
+            <input class = "form-control" name = "ldl" type = "number" id = "ldl" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "adiposity">Adiposity:</label>
+            <input class = "form-control" name = "adiposity" type = "number" id = "adiposity" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "famhist">Has it occurred to any of the family members before?</label>
+            <select class = "form-control" name = "famhist" id = "famhist">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
             </select>
-            <input name = "typea" type = "number" step = "any">
-            <input name = "alcohol" type = "number" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "typea">Type A personality score:</label>
+            <input class = "form-control" name = "typea" type = "number" id = "typea" step = "any">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "alcohol">Yearly alcohol consumption(kg):</label>
+            <input class = "form-control" name = "alcohol" type = "number" id = "alcohol" step = "any">
         </fieldset>
         <div class = "form-group">
             <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>

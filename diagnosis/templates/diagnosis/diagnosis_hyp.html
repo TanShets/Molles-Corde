@@ -3,21 +3,48 @@
 {% block content %}
 <div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
     <h1>Enter Hypertension Information</h1><br>
-    <form method = "POST">
+    <form method = "POST" style="width: 50%;">
         {% csrf_token %}
         <fieldset class = "form-group">
-            <input name = "masl" type = "number" step = "any">
-            <input name = "systolic_bp" type = "number" step = "any">
-            <input name = "diastolic_bp" type = "number" step = "any">
-            <select name = "diabetes_mellitus">
+            <label for = "masl">Current Altitude above sea level:</label>
+            <input class = "form-control" name = "masl" id = "masl" type = "number" step = "any">    
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "systolic_bp">Systolic Blood Pressure:</label>
+            <input class = "form-control" name = "systolic_bp" id = "systolic_bp" type = "number" step = "any">    
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "diastolic_bp">Diastolic Blood Pressure:</label>
+            <input class = "form-control" name = "diastolic_bp" id = "diastolic_bp" type = "number" step = "any">    
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "diabetes_mellitus">Diabetic?</label>
+            <select class = "form-control" name = "diabetes_mellitus" id = "diabetes_mellitus">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
-            </select>
-            <select name = "cv_diseases">
+            </select>   
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "cv_diseases">Previously affected by Cardiovascular disease?</label>
+            <select class = "form-control" name = "cv_diseases" id = "cv_diseases">
                 <option value = "1">Yes</option>
                 <option value = "0">No</option>
-            </select>
-            <select name = "sist_old">
+            </select> 
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "sist_old">Old Systolic Pressure:</label>
+            <select class = "form-control" name = "sist_old" id = "sist_old">
+                <option value = "0">Optma</option>
+                <option value = "1">Normal</option>
+                <option value = "2">Normal/alta</option>
+                <option value = "3">HTA 1</option>
+                <option value = "4">HTA 2</option>
+                <option value = "5">HTA 3</option>
+            </select> 
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "diast_old">Old Diastolic Pressure:</label>
+            <select class = "form-control" name = "diast_old" id = "diast_old">
                 <option value = "0">Optma</option>
                 <option value = "1">Normal</option>
                 <option value = "2">Normal/alta</option>
@@ -25,27 +52,28 @@
                 <option value = "4">HTA 2</option>
                 <option value = "5">HTA 3</option>
             </select>
-            <select name = "diast_old">
-                <option value = "0">Optma</option>
-                <option value = "1">Normal</option>
-                <option value = "2">Normal/alta</option>
-                <option value = "3">HTA 1</option>
-                <option value = "4">HTA 2</option>
-                <option value = "5">HTA 3</option>
-            </select>
-            <select name = "sist_new">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "sist_new">New Systolic Pressure:</label>
+            <select class = "form-control" name = "sist_new" id = "sist_new">
                 <option value = "0">Normal</option>
                 <option value = "1">Elevated</option>
                 <option value = "2">HTA 2</option>
                 <option value = "3">HTA 1</option>
                 <option value = "4">HTA crisis</option>
             </select>
-            <select name = "diast_new">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "diast_new">New Diastolic Pressure:</label>
+            <select class = "form-control" name = "diast_new" id = "diast_new">
                 <option value = "0">Normal/Elevated</option>
                 <option value = "1">HTA 2</option>
                 <option value = "2">HTA 1</option>
             </select>
-            <select name = "BMI_cat">
+        </fieldset>
+        <fieldset class = "form-group">
+            <label for = "BMI_cat">BMI Category:</label>
+            <select class = "form-control" name = "BMI_cat" id = "BMI_cat">
                 <option value = "0">Normal</option>
                 <option value = "1">Overweight</option>
                 <option value = "2">Obese</option>

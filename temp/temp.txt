@@ -1,0 +1,8 @@
+<fieldset class = "form-group">
+	<label for = "ap_hi">ap_hi?</label>
+	<input name = "ap_hi" type = "number" id = "ap_hi" step = "any">
+</fieldset>
+<fieldset class = "form-group">
+	<label for = "ap_lo">ap_lo?</label>
+	<input name = "ap_lo" type = "number" id = "ap_lo" step = "any">
+</fieldset>
