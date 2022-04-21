@@ -5,6 +5,7 @@
     <h1>Enter General Information</h1><br>
     <form method = "POST" style="width: 50%;">
         {% csrf_token %}
+        <input name = "id" type = "hidden" value = "1">
         <fieldset class = "form-group">
             <label for = "age">Age (years):</label>
             <input class = "form-control" name = "age" id = "age" type = "number">
@@ -59,7 +60,17 @@
         </fieldset>
         <div class = "form-group">
             <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
-            <a class = "btn btn-primary" id = "Login" href = "{% url 'diagnosis-home' %}">Create Account</a>
+        </div>
+    </form>
+    <form method = "POST" style = "width: 50%;" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input name = "id" type = "hidden" value = "2">
+        <div class = "form-group">
+            <label for = "file">Upload File Here:</label>
+            <input type = "file" name = "file" id = "file" class = "form-control">
+        </div>
+        <div class = "form-group">
+            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
         </div>
     </form>
 </div>

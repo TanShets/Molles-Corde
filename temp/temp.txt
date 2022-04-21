@@ -1,8 +1,11 @@
-<fieldset class = "form-group">
-	<label for = "ap_hi">ap_hi?</label>
-	<input name = "ap_hi" type = "number" id = "ap_hi" step = "any">
-</fieldset>
-<fieldset class = "form-group">
-	<label for = "ap_lo">ap_lo?</label>
-	<input name = "ap_lo" type = "number" id = "ap_lo" step = "any">
-</fieldset>
+age, weight, height, sex, smoke, alcohol, physical_activity, heart_rate, cholesterol
+
+masl, systolic_bp, diastolic_bp, diabetes_mellitus, cv_diseases, smoking, physical_activity, sist_old, diast_old,
+sist_new, diast_new, BMI_cat
+
+'qrs_duration', 'p-r_interval', 'q-t_interval', 't_interval', 'p_interval', 'qrs', 'T', 'P', 'QRST','J', 'heart_rate',
+'Q wave', 'R wave', 'S wave', "R' wave", "S' wave", 'no_of_deflections', 'Ragged R wave', 
+'Diphasic Derivation of R wave', 'Ragged P wave', 'Diphasic Derivation of P wave', 'Ragged T wave',
+'Diphasic Derivation of T wave', 'JJ wave Amp', 'Q wave Amp', 'R wave Amp', 'S wave Amp', "R' wave Amp", 
+"S' wave Amp", 'P wave Amp', 'T wave Amp', 'QRSA', 'QRSTA'
+

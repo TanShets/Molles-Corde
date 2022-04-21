@@ -1,12 +1,18 @@
 import numpy as np
 import pandas as pd
 from tensorflow.keras.models import load_model
+from tensorflow.keras.metrics import categorical_accuracy, Accuracy, CategoricalAccuracy, SparseCategoricalAccuracy
 import sys
 sys.path.append('../molles_corde')
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+def accuracy(Y_true, Y_pred):
+    m = CategoricalAccuracy()
+    m.update_state(Y_true, Y_pred)
+    return m.result().numpy()
 
 def get_model(name):
     addr = BASE_DIR.__str__().replace("\\", '/')

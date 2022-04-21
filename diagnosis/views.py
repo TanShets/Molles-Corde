@@ -4,7 +4,78 @@ sys.path.append('../utils')
 from utils import model_loader
 import numpy as np
 import pandas as pd
-import copy
+import copy, io
+
+def process_Hyp(data):
+    X = dict()
+    names1 = [
+        'masl', 'sex', 'age', 'systolic_bp', 'diastolic_bp', 'weight', 'height', 'bmi', 
+        'diabetes_mellitus', 'cv_diseases', 'smoke', 'hyp', 'physical_activity', 'sist_old', 
+        'diast_old', 'sist_new', 'diast_new', 'BMI_cat'
+    ]
+
+    names2 = [
+        'masl', 'sex', 'age_years', 'systolic_bp', 'diastolic_bp', 'weight_kg', 'height_cm', 'body_mass_index', 
+        'diabetes_mellitus', 'cv_diseases', 'smoking', 'hyp', 'physical_activity', 'sist_old', 
+        'diast_old', 'sist_new', 'diast_new', 'BMI_cat'
+    ]
+    
+    for i in range(len(names1)):
+        X[names2[i]] = data[names1[i]]
+    X['height_cm'] *= 100
+    X = pd.DataFrame(X)
+    return model_loader.get_model_result(X, 'hyp')
+
+def process_Arr(data):
+    X = dict()
+    names = [
+        'age', 'height', 'weight', 'qrs_duration', 'p-r_interval', 'q-t_interval', 
+        't_interval', 'p_interval', 'qrs', 'T', 'P', 'QRST', 'J', 'heart_rate', 'Q wave', 
+        'R wave', 'S wave', "R' wave", "S' wave", 'no_of_deflections', 'Ragged R wave', 
+        'Diphasic Derivation of R wave', 'Ragged P wave', 'Diphasic Derivation of P wave', 
+        'Ragged T wave', 'Diphasic Derivation of T wave', 'JJ wave Amp', 'Q wave Amp', 
+        'R wave Amp', 'S wave Amp', "R' wave Amp", "S' wave Amp", 'P wave Amp', 'T wave Amp', 
+        'QRSA', 'QRSTA', 'sex'
+    ]
+    
+    for i in names:
+        X[i] = data[i]
+    X = pd.DataFrame(X)
+    return model_loader.get_model_result(X, 'arrhythmia')
+
+def process_CHD(data):
+    X = dict()
+    names1 = [
+        'systolic_bp', 'tobacco_consumed', 'ldl', 'adiposity', 'famhist', 'typea', 
+        'bmi', 'alcohol_consumed', 'age'
+    ]
+    names2 = [
+        'sbp', 'tobacco', 'ldl', 'adiposity', 'famhist', 'typea', 
+        'obesity', 'alcohol', 'age'
+    ]
+    
+    for i in range(len(names1)):
+        X[names2[i]] = data[names1[i]]
+    
+    X = pd.DataFrame(X)
+    return model_loader.get_model_result(X, 'chd')
+
+def process_CVD(data):
+    X = dict()
+    names1 = [
+        'age', 'sex', 'height', 'weight', 'systolic_bp', 'diastolic_bp', 'cholesterol', 'gluc',
+        'smoke', 'alcohol', 'physical_activity'
+    ]
+    names2 = [
+        'age', 'gender', 'height', 'weight', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc',
+        'smoke', 'alco', 'active'
+    ]
+    
+    for i in range(len(names1)):
+        X[names2[i]] = data[names1[i]]
+    
+    X = pd.DataFrame(X)
+    return model_loader.get_model_result(X, 'cvd')
 
 def DiagnosisHome(request):
     context = {
@@ -13,7 +84,7 @@ def DiagnosisHome(request):
     }
     if request.method != 'POST':
         return render(request, 'diagnosis/diagnosis_home.html', context)
-    else:
+    elif int(request.POST.get('id')) == 1:
         X = dict()
         X['age'] = [float(request.POST.get('age', 21))]
         X['bmi'] = [float(request.POST.get('weight')) / (float(request.POST.get('height'))**2)]
@@ -51,6 +122,45 @@ def DiagnosisHome(request):
         del request.session['X']
         request.session.modified = True
         return render(request, 'diagnosis/diagnosis_home.html', context)
+    else:
+        print(request.POST, request.FILES)
+        print(type(request.FILES['file']))
+        fp = request.FILES['file']
+        data = pd.read_csv(io.StringIO(fp.read().decode('utf-8')), delimiter = ',')
+        data = data.drop('Unnamed: 0', axis = 1)
+        X = dict()
+        X['age'] = data['age']
+        X['bmi'] = data['bmi']
+        X['sex'] = data['sex']
+        X['smoke'] = data['smoke']
+        X['alcohol'] = data['alcohol']
+        X['physical_activity'] = data['physical_activity']
+        X['heart_rate'] = data['heart_rate']
+        X['cholesterol'] = data['cholesterol']
+        x = X
+        X = pd.DataFrame(X)
+        Y = model_loader.get_model_result(X, 'general')
+        indices = [[] for _ in range(4)]
+        for i in range(Y.shape[0]):
+            for j in range(Y.shape[1]):
+                if Y[i, j] >= 0.2:
+                    indices[j].append(i)
+        Y_1 = process_Hyp(data.iloc[indices[0]])
+        Y_2 = process_Arr(data.iloc[indices[1]])
+        Y_3 = process_CHD(data.iloc[indices[2]])
+        Y_4 = process_CVD(data.iloc[indices[3]])
+
+        Y[indices[0], 0] = Y_1
+        Y[indices[1], 1] = Y_2.reshape(Y_2.shape[0])
+        Y[indices[2], 2] = Y_3.reshape(Y_3.shape[0])
+        Y[indices[3], 3] = Y_4.reshape(Y_4.shape[0])
+        Ys = [Y_1, Y_2, Y_3, Y_4]
+        for i in range(len(indices)):
+            for j in range(len(indices[i])):
+                Y[indices[i][j], i] = Ys[i][j]
+
+        print(model_loader.accuracy(data[['hyp', 'arrhythmia', 'chd', 'cvd']].to_numpy(), Y))
+        return redirect('diagnosis-home')
 
 def DiagnosisCVD(request):
     context = {
@@ -149,7 +259,6 @@ def DiagnosisArrhymthmia(request):
         request.session.modified = True
         return redirect('diagnosis-home')
 
-
 def DiagnosisHyp(request):
     context = {
         'title': 'Hypertension',
@@ -165,7 +274,7 @@ def DiagnosisHyp(request):
             return render(request, 'diagnosis/diagnosis_hyp.html', context)
         X = dict()
         X['masl'] = [float(request.POST.get('masl'))]
-        X['sex'] = stored_vals['sex']
+        X['sex'] = abs(stored_vals['sex'] - 1)
         X['age_years'] = stored_vals['age']
         X['systolic_bp'] = [float(request.POST.get('systolic_bp'))]
         X['diastolic_bp'] = [float(request.POST.get('diastolic_bp'))]
