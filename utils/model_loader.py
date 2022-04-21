@@ -21,7 +21,8 @@ def get_model(name):
         'cvd': addr + '/Models/CVD.h5',
         'hypertension': addr + '/Models/model1_hypertension.h5',
         'arrhythmia': addr + '/Models/Arrhythmia2.h5',
-        'general': addr + '/Models/model3.h5'
+        'general': addr + '/Models/gen_model_5/gen_1.h5',
+        'general 2': addr + '/Models/gen_model_4/gen_2.h5'
     }
     
     if linker.get(name, None) is None:
@@ -52,9 +53,23 @@ def normalize_input(X, name):
         X_max = np.load(addr + '/Models/Arrhythmia/max.npy')
         X[line] = (X[line] - X_min) / (X_max - X_min)
     elif name == 'general':
-        X_min = np.load(addr + '/Models/gen_model_2/gen_min.npy')[:8]
-        X_max = np.load(addr + '/Models/gen_model_2/gen_max.npy')[:8]
-        X = (X - X_min) / (X_max - X_min)
+        # X_min = np.load(addr + '/Models/gen_model_2/gen_min.npy')[:8]
+        # X_max = np.load(addr + '/Models/gen_model_2/gen_max.npy')[:8]
+        X_min = np.load(addr + '/Models/gen_model_5/gen_min_1.npy')[:8]
+        X_max = np.load(addr + '/Models/gen_model_5/gen_max_1.npy')[:8]
+        X_temp = X.to_numpy()
+        # print(X_min)
+        # print(X_temp.shape, X_min.shape, X_max.shape)
+        X = (X_temp - X_min) / (X_max - X_min)
+    elif name == 'general 2':
+        # X_min = np.load(addr + '/Models/gen_model_2/gen_min.npy')[:8]
+        # X_max = np.load(addr + '/Models/gen_model_2/gen_max.npy')[:8]
+        X_min = np.load(addr + '/Models/gen_model_4/gen_min_2.npy')[:9]
+        X_max = np.load(addr + '/Models/gen_model_4/gen_max_2.npy')[:9]
+        X_temp = X.to_numpy()
+        # print(X_min)
+        # print(X_temp.shape, X_min.shape, X_max.shape)
+        X = (X_temp - X_min) / (X_max - X_min)
     
     return np.array(X)
 
@@ -66,4 +81,5 @@ def get_model_result(X, name):
         return None
     # print(model.predict(aaa))
     # print(model.predict(X_in))
+    print(X_in.shape, name)
     return model.predict(X_in)

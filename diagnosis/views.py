@@ -10,13 +10,13 @@ def process_Hyp(data):
     X = dict()
     names1 = [
         'masl', 'sex', 'age', 'systolic_bp', 'diastolic_bp', 'weight', 'height', 'bmi', 
-        'diabetes_mellitus', 'cv_diseases', 'smoke', 'hyp', 'physical_activity', 'sist_old', 
+        'diabetes_mellitus', 'cv_diseases', 'smoke', 'physical_activity', 'sist_old', 
         'diast_old', 'sist_new', 'diast_new', 'BMI_cat'
     ]
 
     names2 = [
         'masl', 'sex', 'age_years', 'systolic_bp', 'diastolic_bp', 'weight_kg', 'height_cm', 'body_mass_index', 
-        'diabetes_mellitus', 'cv_diseases', 'smoking', 'hyp', 'physical_activity', 'sist_old', 
+        'diabetes_mellitus', 'cv_diseases', 'smoking', 'physical_activity', 'sist_old', 
         'diast_old', 'sist_new', 'diast_new', 'BMI_cat'
     ]
     
@@ -24,7 +24,7 @@ def process_Hyp(data):
         X[names2[i]] = data[names1[i]]
     X['height_cm'] *= 100
     X = pd.DataFrame(X)
-    return model_loader.get_model_result(X, 'hyp')
+    return model_loader.get_model_result(X, 'hypertension')
 
 def process_Arr(data):
     X = dict()
@@ -123,8 +123,6 @@ def DiagnosisHome(request):
         request.session.modified = True
         return render(request, 'diagnosis/diagnosis_home.html', context)
     else:
-        print(request.POST, request.FILES)
-        print(type(request.FILES['file']))
         fp = request.FILES['file']
         data = pd.read_csv(io.StringIO(fp.read().decode('utf-8')), delimiter = ',')
         data = data.drop('Unnamed: 0', axis = 1)
@@ -137,26 +135,43 @@ def DiagnosisHome(request):
         X['physical_activity'] = data['physical_activity']
         X['heart_rate'] = data['heart_rate']
         X['cholesterol'] = data['cholesterol']
+        # X['systolic_bp'] = data['systolic_bp']
         x = X
         X = pd.DataFrame(X)
+        # Y = model_loader.get_model_result(X, 'general')
         Y = model_loader.get_model_result(X, 'general')
         indices = [[] for _ in range(4)]
         for i in range(Y.shape[0]):
             for j in range(Y.shape[1]):
                 if Y[i, j] >= 0.2:
                     indices[j].append(i)
-        Y_1 = process_Hyp(data.iloc[indices[0]])
-        Y_2 = process_Arr(data.iloc[indices[1]])
-        Y_3 = process_CHD(data.iloc[indices[2]])
-        Y_4 = process_CVD(data.iloc[indices[3]])
+        Ys = []
+        if len(indices[0]) > 0:
+            Y_1 = process_Hyp(data.iloc[indices[0]])
+            Ys.append(Y_1)
+            Y[indices[0], 0] = Y_1.reshape(Y_1.shape[0])
+        
+        if len(indices[1]) > 0:
+            Y_2 = process_Arr(data.iloc[indices[1]])
+            Ys.append(Y_2)
+            Y[indices[1], 1] = Y_2.reshape(Y_2.shape[0])
+        
+        if len(indices[2]) > 0:
+            Y_3 = process_CHD(data.iloc[indices[2]])
+            Ys.append(Y_3)
+            Y[indices[2], 2] = Y_3.reshape(Y_3.shape[0])
+        
+        if len(indices[3]) > 0:
+            Y_4 = process_CVD(data.iloc[indices[3]])
+            Ys.append(Y_4)
+            Y[indices[3], 3] = Y_4.reshape(Y_4.shape[0])
+        # print(Y_1 is None, Y_2 is None, Y_3 is None, Y_4 is None)
 
-        Y[indices[0], 0] = Y_1
-        Y[indices[1], 1] = Y_2.reshape(Y_2.shape[0])
-        Y[indices[2], 2] = Y_3.reshape(Y_3.shape[0])
-        Y[indices[3], 3] = Y_4.reshape(Y_4.shape[0])
-        Ys = [Y_1, Y_2, Y_3, Y_4]
         for i in range(len(indices)):
             for j in range(len(indices[i])):
+                # if Ys[i] is None or Y is None or Y[indices[i]] is None:
+                    # print(i, j)
+                    # print(Ys[i], Y[indices[i]])
                 Y[indices[i][j], i] = Ys[i][j]
 
         print(model_loader.accuracy(data[['hyp', 'arrhythmia', 'chd', 'cvd']].to_numpy(), Y))
