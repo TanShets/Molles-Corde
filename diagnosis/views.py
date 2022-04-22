@@ -5,6 +5,11 @@ from utils import model_loader
 import numpy as np
 import pandas as pd
 import copy, io
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+addr = BASE_DIR.__str__().replace("\\", '/')
+import mimetypes
+from django.http.response import HttpResponse
 
 def process_Hyp(data):
     X = dict()
@@ -77,6 +82,24 @@ def process_CVD(data):
     X = pd.DataFrame(X)
     return model_loader.get_model_result(X, 'cvd')
 
+def DownloadPage(request):
+    context = {
+        'title': 'Download the page',
+        'path': addr + '/out/output.csv'
+    }
+    if request.method == 'POST':
+        if int(request.POST.get('id')) == 1:
+            fp = open(addr + '/out/output.csv')
+            mime_type, _ = mimetypes.guess_type(addr + '/out/output.csv')
+            response = HttpResponse(fp, content_type=mime_type)
+            # Set the HTTP header for sending to browser
+            response['Content-Disposition'] = "attachment; filename=output.csv"
+            # Return the response value
+            return response
+        else:
+            return redirect('diagnosis-home')
+    return render(request, 'diagnosis/diagnosis_result_2.html', context)
+
 def DiagnosisHome(request):
     context = {
         'title': 'Home',
@@ -121,7 +144,12 @@ def DiagnosisHome(request):
         del request.session['needsRunning']
         del request.session['X']
         request.session.modified = True
-        return render(request, 'diagnosis/diagnosis_home.html', context)
+        new_Y = {
+            'Hypertension': [0], 'Arrhythmia': [0], 'CHD': [0], 'CVD': [0]
+        }
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')
     else:
         fp = request.FILES['file']
         data = pd.read_csv(io.StringIO(fp.read().decode('utf-8')), delimiter = ',')
@@ -175,7 +203,17 @@ def DiagnosisHome(request):
                 Y[indices[i][j], i] = Ys[i][j]
 
         print(model_loader.accuracy(data[['hyp', 'arrhythmia', 'chd', 'cvd']].to_numpy(), Y))
-        return redirect('diagnosis-home')
+        new_Y = {
+            'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
+        }
+        for i in range(Y.shape[0]):
+            new_Y['Hypertension'].append(Y[i, 0])
+            new_Y['Arrhythmia'].append(Y[i, 1])
+            new_Y['CHD'].append(Y[i, 2])
+            new_Y['CVD'].append(Y[i, 3])
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')
 
 def DiagnosisCVD(request):
     context = {
@@ -213,7 +251,16 @@ def DiagnosisCVD(request):
         del request.session['needsRunning']
         del request.session['X']
         request.session.modified = True
-        return redirect('diagnosis-home')
+        new_Y = {
+            'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
+        }
+        new_Y['Hypertension'].append(0)
+        new_Y['Arrhythmia'].append(0)
+        new_Y['CHD'].append(0)
+        new_Y['CVD'].append(Y[0])
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')
 
 def DiagnosisArrhymthmia(request):
     context = {
@@ -272,7 +319,16 @@ def DiagnosisArrhymthmia(request):
         del request.session['needsRunning']
         del request.session['X']
         request.session.modified = True
-        return redirect('diagnosis-home')
+        new_Y = {
+            'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
+        }
+        new_Y['Hypertension'].append(0)
+        new_Y['Arrhythmia'].append(Y[0])
+        new_Y['CHD'].append(0)
+        new_Y['CVD'].append(0)
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')
 
 def DiagnosisHyp(request):
     context = {
@@ -323,7 +379,16 @@ def DiagnosisHyp(request):
         del request.session['needsRunning']
         del request.session['X']
         request.session.modified = True
-        return redirect('diagnosis-home')
+        new_Y = {
+            'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
+        }
+        new_Y['Hypertension'].append(Y[0])
+        new_Y['Arrhythmia'].append(0)
+        new_Y['CHD'].append(0)
+        new_Y['CVD'].append(0)
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')
         # return render(request, 'diagnosis/diagnosis_hyp.html', context)
 
 def DiagnosisCHD(request):
@@ -365,4 +430,13 @@ def DiagnosisCHD(request):
         del request.session['needsRunning']
         del request.session['X']
         request.session.modified = True
-        return redirect('diagnosis-home')
+        new_Y = {
+            'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
+        }
+        new_Y['Hypertension'].append(0)
+        new_Y['Arrhythmia'].append(0)
+        new_Y['CHD'].append(Y[0])
+        new_Y['CVD'].append(0)
+        new_Y = pd.DataFrame(new_Y)
+        new_Y.to_csv(addr + '/out/output.csv')
+        return redirect('diagnosis-download')

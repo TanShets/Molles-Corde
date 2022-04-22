@@ -1,0 +1,17 @@
+{% extends "diagnosis/diagnosis_main.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
+    <h2>Diagnosis Complete. Click the button to download</h2>
+    <form method = "POST">
+        {% csrf_token %}
+        <input type = "hidden" name = "id" value = "1">
+        <button class = "btn btn-primary" type = "submit">Download</button>
+    </form>
+    <form method = "POST">
+        {% csrf_token %}
+        <input type = "hidden" name = "id" value = "2">
+        <button class = "btn btn-primary" type = "submit">Back</button>
+    </form>
+</div>
+{% endblock %}

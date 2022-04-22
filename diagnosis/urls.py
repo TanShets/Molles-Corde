@@ -7,4 +7,5 @@ urlpatterns = [
     path('cvd', views.DiagnosisCVD, name = 'diagnosis-cvd'),
     path('hyp', views.DiagnosisHyp, name = 'diagnosis-hyp'),
     path('arr', views.DiagnosisArrhymthmia, name = 'diagnosis-arr'),
+    path('result', views.DownloadPage, name = 'diagnosis-download')
 ]
