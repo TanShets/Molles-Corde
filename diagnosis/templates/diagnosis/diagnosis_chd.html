@@ -1,9 +1,9 @@
 {% extends "diagnosis/diagnosis_main.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
+<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px; width: 50%;">
     <h1>Enter CHD Information</h1><br>
-    <form method = "POST" style="width: 50%;">
+    <form method = "POST">
         {% csrf_token %}
         <fieldset class = "form-group">
             <label for = "sbp">Systolic Blood Pressure:</label>
@@ -37,8 +37,7 @@
             <input class = "form-control" name = "alcohol" type = "number" id = "alcohol" step = "any">
         </fieldset>
         <div class = "form-group">
-            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
-            <a class = "btn btn-primary" id = "Login" href = "{% url 'diagnosis-home' %}">Create Account</a>
+            <button type = "submit" class = "form-control btn btn-success" style = "margin-right: 10px;">Submit</button>
         </div>
     </form>
 </div>

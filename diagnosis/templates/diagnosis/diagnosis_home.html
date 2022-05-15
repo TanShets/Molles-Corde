@@ -1,9 +1,9 @@
 {% extends "diagnosis/diagnosis_main.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
+<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px; width: 50%;">
     <h1>Enter General Information</h1><br>
-    <form method = "POST" style="width: 50%;">
+    <form method = "POST" style="width: 100%;">
         {% csrf_token %}
         <input name = "id" type = "hidden" value = "1">
         <fieldset class = "form-group">
@@ -59,21 +59,7 @@
             </select>
         </fieldset>
         <div class = "form-group">
-            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
-        </div>
-    </form>
-</div>
-<div class = "container" style = "background-color: #f2f2f2; padding-bottom: 20px;">
-    <form method = "POST" style = "width: 50%;" enctype="multipart/form-data">
-        <h1>Upload .csv file for multiple patients</h1>
-        {% csrf_token %}
-        <input name = "id" type = "hidden" value = "2">
-        <div class = "form-group">
-            <label for = "file">Upload File Here:</label>
-            <input type = "file" name = "file" id = "file" class = "form-control">
-        </div>
-        <div class = "form-group">
-            <button type = "submit" class = "btn btn-success" style = "margin-right: 10px;">Submit</button>
+            <button type = "submit" class = "form-control btn btn-success" style = "margin-right: 10px; margin-top: 10px;">Submit</button>
         </div>
     </form>
 </div>

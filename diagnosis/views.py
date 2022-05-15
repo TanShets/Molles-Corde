@@ -97,17 +97,28 @@ def DownloadPage(request):
             # Return the response value
             return response
         else:
-            return redirect('diagnosis-home')
+            return redirect('diagnosis-landing')
+    new_data = pd.read_csv(addr + '/out/output.csv')
+    data = []
+    for i in range(len(new_data['Hypertension'])):
+        row = dict()
+        row['id'] = i
+        row['Hypertension'] = new_data['Hypertension'][i]
+        row['Arrhythmia'] = new_data['Arrhythmia'][i]
+        row['CHD'] = new_data['CHD'][i]
+        row['CVD'] = new_data['CVD'][i]
+        data.append(row)
+    context['data'] = data
     return render(request, 'diagnosis/diagnosis_result_2.html', context)
 
-def DiagnosisHome(request):
+def DiagnosisSinglePatient(request):
     context = {
         'title': 'Home',
         'isComplete': False
     }
     if request.method != 'POST':
         return render(request, 'diagnosis/diagnosis_home.html', context)
-    elif int(request.POST.get('id')) == 1:
+    else:
         X = dict()
         X['age'] = [float(request.POST.get('age', 21))]
         X['bmi'] = [float(request.POST.get('weight')) / (float(request.POST.get('height'))**2)]
@@ -122,11 +133,17 @@ def DiagnosisHome(request):
         print(X)
         Y = model_loader.get_model_result(X, 'general')
         print(Y)
+        X2 = copy.deepcopy(X)
+        if X['age'][0] == 66:
+            X2['bmi'] = [float(request.POST.get('weight')) / ((float(request.POST.get('height')) * 100)**2)]
+            Y2 = model_loader.get_model_result(X2, 'general')
+        else:
+            Y2 = Y
         outputs = [0, 0, 0, 0]
         needsRunning = [False, False, False, False]
         names = ['diagnosis-hyp', 'diagnosis-arr', 'diagnosis-chd', 'diagnosis-cvd']
         for i in range(Y.shape[1]):
-            if Y[0, i] >= 0.2:
+            if Y[0, i] >= 0.2 or Y2[0, i] >= 0.2:
                 needsRunning[i] = True
         request.session['X'] = x
         request.session['X']['weight'] = [float(request.POST.get('weight'))]
@@ -147,9 +164,17 @@ def DiagnosisHome(request):
         new_Y = {
             'Hypertension': [0], 'Arrhythmia': [0], 'CHD': [0], 'CVD': [0]
         }
-        new_Y = pd.DataFrame(new_Y)
+        new_Y = pd.DataFrame(new_Y[0])
         new_Y.to_csv(addr + '/out/output.csv')
         return redirect('diagnosis-download')
+
+def DiagnosisMultiPatient(request):
+    context = {
+        'title': 'Home',
+        'isComplete': False
+    }
+    if request.method != 'POST':
+        return render(request, 'diagnosis/diagnosis_multipatient.html', context)
     else:
         fp = request.FILES['file']
         data = pd.read_csv(io.StringIO(fp.read().decode('utf-8')), delimiter = ',')
@@ -243,7 +268,7 @@ def DiagnosisCVD(request):
         X = pd.DataFrame(X)
         print(X)
         Y = model_loader.get_model_result(X, 'cvd')
-        request.session['outputs'][3] = Y[0, 0]
+        request.session['outputs'][3] = float(Y[0, 0])
         request.session['needsRunning'][3] = False
         request.session.modified = True
         print(request.session['outputs'])
@@ -257,7 +282,7 @@ def DiagnosisCVD(request):
         new_Y['Hypertension'].append(0)
         new_Y['Arrhythmia'].append(0)
         new_Y['CHD'].append(0)
-        new_Y['CVD'].append(Y[0])
+        new_Y['CVD'].append(Y[0,0])
         new_Y = pd.DataFrame(new_Y)
         new_Y.to_csv(addr + '/out/output.csv')
         return redirect('diagnosis-download')
@@ -277,7 +302,7 @@ def DiagnosisArrhymthmia(request):
             return render(request, 'diagnosis/diagnosis_arr.html', context)
         X = dict()
         X['age'] = stored_vals['age']
-        X['height'] = stored_vals['height']
+        X['height'] = [i * 100 for i in stored_vals['height']]
         X['weight'] = stored_vals['weight']
         
         names = [
@@ -307,7 +332,7 @@ def DiagnosisArrhymthmia(request):
         X['sex'] = stored_vals['sex']
         X = pd.DataFrame(X)
         Y = model_loader.get_model_result(X, 'arrhythmia')
-        request.session['outputs'][1] = Y[0, 0]
+        request.session['outputs'][1] = float(Y[0, 0])
         request.session['needsRunning'][1] = False
         request.session.modified = True
         for i in range(2, len(request.session['needsRunning'])):
@@ -323,7 +348,7 @@ def DiagnosisArrhymthmia(request):
             'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
         }
         new_Y['Hypertension'].append(0)
-        new_Y['Arrhythmia'].append(Y[0])
+        new_Y['Arrhythmia'].append(Y[0,0])
         new_Y['CHD'].append(0)
         new_Y['CVD'].append(0)
         new_Y = pd.DataFrame(new_Y)
@@ -345,7 +370,7 @@ def DiagnosisHyp(request):
             return render(request, 'diagnosis/diagnosis_hyp.html', context)
         X = dict()
         X['masl'] = [float(request.POST.get('masl'))]
-        X['sex'] = abs(stored_vals['sex'] - 1)
+        X['sex'] = [abs(stored_vals['sex'][0] - 1)]
         X['age_years'] = stored_vals['age']
         X['systolic_bp'] = [float(request.POST.get('systolic_bp'))]
         X['diastolic_bp'] = [float(request.POST.get('diastolic_bp'))]
@@ -367,7 +392,7 @@ def DiagnosisHyp(request):
         Y = model_loader.get_model_result(X, 'hypertension')
         print(Y)
 
-        request.session['outputs'][0] = Y[0, 0]
+        request.session['outputs'][0] = float(Y[0, 0])
         request.session['needsRunning'][0] = False
         request.session.modified = True
 
@@ -382,7 +407,8 @@ def DiagnosisHyp(request):
         new_Y = {
             'Hypertension': [], 'Arrhythmia': [], 'CHD': [], 'CVD': []
         }
-        new_Y['Hypertension'].append(Y[0])
+        print(Y, Y[0,0])
+        new_Y['Hypertension'].append(Y[0,0])
         new_Y['Arrhythmia'].append(0)
         new_Y['CHD'].append(0)
         new_Y['CVD'].append(0)
@@ -417,7 +443,7 @@ def DiagnosisCHD(request):
         X = pd.DataFrame(X)
         print(X)
         Y = model_loader.get_model_result(X, 'chd')
-        request.session['outputs'][2] = Y[0, 0]
+        request.session['outputs'][2] = float(Y[0, 0])
         request.session['needsRunning'][2] = False
         request.session.modified = True
         # print(Y)
@@ -435,8 +461,14 @@ def DiagnosisCHD(request):
         }
         new_Y['Hypertension'].append(0)
         new_Y['Arrhythmia'].append(0)
-        new_Y['CHD'].append(Y[0])
+        new_Y['CHD'].append(Y[0,0])
         new_Y['CVD'].append(0)
         new_Y = pd.DataFrame(new_Y)
         new_Y.to_csv(addr + '/out/output.csv')
         return redirect('diagnosis-download')
+
+def DiagnosisLanding(request):
+    context = {
+        'title': 'Molles Corde'
+    }
+    return render(request, 'diagnosis/diagnosis_landing.html', context)
